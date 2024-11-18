@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "27198926682",
+    "project_id": "cis400-final",
+    "storage_bucket": "cis400-final.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:27198926682:android:8a7dade0ed41e0884b8d63",
+        "android_client_info": {
+          "package_name": "com.bjpellegrino.cis400_final"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC4dq1Lq4uq_q5MAf02ZDEicmZtQfEvtNY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
