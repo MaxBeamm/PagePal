@@ -1,6 +1,6 @@
-# cis400_final
+# PagePal
 
-FInal project
+Mobile App/Flutter Project
 
 ## Getting Started
 
