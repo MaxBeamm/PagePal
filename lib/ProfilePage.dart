@@ -3,7 +3,6 @@ import 'package:cis400_final/ChangePasswordPage.dart';
 import 'package:cis400_final/LogInSignUpPage.dart';
 import 'package:cis400_final/globals.dart';
 import 'package:cis400_final/widgets/BottomBar.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

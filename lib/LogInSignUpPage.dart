@@ -1,4 +1,3 @@
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cis400_final/SavedPage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -127,27 +126,6 @@ class _LogInSignUpPageState extends State<LogInSignUpPage> {
     return success;
   }
 
-  // This shows a CupertinoModalPopup with a reasonable fixed height which hosts CupertinoDatePicker.
-  void _showDialog(Widget child) {
-    showCupertinoModalPopup<void>(
-        context: context,
-        builder: (BuildContext context) => Container(
-          height: 216,
-          padding: const EdgeInsets.only(top: 6.0),
-          // The Bottom margin is provided to align the popup above the system navigation bar.
-          margin: EdgeInsets.only(
-            bottom: MediaQuery.of(context).viewInsets.bottom,
-          ),
-          color: CupertinoColors.systemBackground.resolveFrom(context),
-          // Use a SafeArea widget to avoid system overlaps.
-          child: SafeArea(
-            top: false,
-            child: child,
-          ),
-        )
-    );
-  }
-
   // These are the fields which only show in the sign up state
   Widget signUpFields(BuildContext context) {
     if (!loginState) {
@@ -200,12 +178,12 @@ class _LogInSignUpPageState extends State<LogInSignUpPage> {
                   }
                   try {
                     setState(() => isLoading = true);
-                    final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+                    await FirebaseAuth.instance.signInWithEmailAndPassword(
                       email: emailController.text,
                       password: passwordController.text,
-                    ).then((value) {
-                      print('VALUE: ${value.user!.uid}');
-                      globalUserInfo.populateFromDatabase(value.user!.uid).then((value) {
+                    ).then((value) async {
+                      await globalUserInfo.populateFromDatabase(value.user!.uid);
+                      if (!mounted) return;
                         setState(() => isLoading = false);
                         //Navigator.pop(context);
                         Navigator.pushReplacement(
@@ -224,7 +202,6 @@ class _LogInSignUpPageState extends State<LogInSignUpPage> {
                             },
                           ),
                         );
-                      });
                     }).onError((error, stackTrace) {
                       setState(() => isLoading = false);
                       _showAlertDialog(context, 'Sign in failed.');
@@ -266,7 +243,7 @@ class _LogInSignUpPageState extends State<LogInSignUpPage> {
               }
               try {
                 setState(() => isLoading = true);
-                final credential = await FirebaseAuth.instance.sendPasswordResetEmail(email: emailController.text).then((value) {
+                await FirebaseAuth.instance.sendPasswordResetEmail(email: emailController.text).then((value) {
                   setState(() => isLoading = false);
                   _showAlertDialog(context, 'Check your email for password reset.');
                 });
@@ -311,17 +288,19 @@ class _LogInSignUpPageState extends State<LogInSignUpPage> {
                   }
                   try {
                     setState(() => isLoading = true);
-                    final credential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+                    await FirebaseAuth.instance.createUserWithEmailAndPassword(
                       email: emailController.text,
                       password: passwordController.text,
-                    ).then((value) {
+                    ).then((value) async {
                       // User account successfully made
                       // Fill up their respective database document
                       if (value.user == null) {
                         setState(() => isLoading = false);
                         throw Exception('account-made-null');
                       }
-                      addUserData(value.user!.uid).then((success) {
+                      final success = await addUserData(value.user!.uid);
+                      if (success) await globalUserInfo.populateFromDatabase(value.user!.uid);
+                      if (!mounted) return;
                         if (success) {
                           setState(() => isLoading = false);
                           //Navigator.pop(context);
@@ -345,14 +324,12 @@ class _LogInSignUpPageState extends State<LogInSignUpPage> {
                           setState(() => isLoading = false);
                           throw Exception('account-made-null');
                         }
-                      });
                     });
                   } on FirebaseAuthException catch (e) {
                     // TODO: Show error message to user
                     setState(() => isLoading = false);
                     if (e.code == 'weak-password') {
                       _showAlertDialog(context, 'Password too weak.');
-                      print('The password ${passwordController.text} provided is too weak.');
                     } else if (e.code == 'email-already-in-use') {
                       _showAlertDialog(context, 'Email in use for another account');
                       print('The account already exists for that email.');
@@ -361,8 +338,9 @@ class _LogInSignUpPageState extends State<LogInSignUpPage> {
                       print('Generated account was null!');
                     }
                   } catch (e) {
-                    print(e);
+                    if (!mounted) return;
                     setState(() => isLoading = false);
+                    _showAlertDialog(context, 'Account setup could not be completed.');
                   }
                 },
               )

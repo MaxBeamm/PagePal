@@ -12,7 +12,7 @@ class BottomBar extends StatelessWidget {
   });
 
   final int _startingIndex = globalCurrentPage.index;
-  BuildContext buildContext;
+  final BuildContext buildContext;
 
   void _onItemTapped(int index, BuildContext context) {
     globalCurrentPage = Pages.values[index];
