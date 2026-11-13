@@ -33,9 +33,9 @@ class FirebaseStorageApi {
 
 Future<void> databaseInit() async {
   if (dbHasInit) return; // This is probably not needed but to be safe
-  dbHasInit = true;
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  dbHasInit = true;
   return;
 }

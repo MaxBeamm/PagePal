@@ -4,6 +4,7 @@ import 'package:cis400_final/SplashPage.dart';
 import 'package:cis400_final/globals.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(MyApp());
 }
 
@@ -16,7 +17,7 @@ class MyApp extends StatelessWidget {
     if (platformIsIOS()) {
       // IOS entry point
       return CupertinoApp(
-        title: 'cis400_final',
+        title: 'PagePal',
         theme: const CupertinoThemeData(
           //colorScheme:
           primaryColor: Colors.green,
@@ -27,7 +28,7 @@ class MyApp extends StatelessWidget {
     } else {
       // Android entry point
       return MaterialApp(
-        title: 'cis400_final',
+        title: 'PagePal',
         theme: ThemeData(
           primarySwatch: Colors.green,
         ),

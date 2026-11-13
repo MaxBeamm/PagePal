@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.bjpellegrino.cis400_final">
+>
    <application
-        android:label="cis400_final"
+        android:label="PagePal"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
