@@ -5,20 +5,20 @@ import 'package:cis400_final/globals.dart';
 
 class PlatformTextField extends StatelessWidget {
 
-  PlatformTextField({
+  const PlatformTextField({
     super.key,
     this.controller,
     this.hintText,
-    this.inputType = null,
+    this.inputType,
     this.requiredReminder = false,
     this.obscureText = false,
   });
 
-  TextEditingController? controller;
-  String? hintText;
-  bool requiredReminder;
-  bool obscureText;
-  TextInputType? inputType;
+  final TextEditingController? controller;
+  final String? hintText;
+  final bool requiredReminder;
+  final bool obscureText;
+  final TextInputType? inputType;
 
   @override
   Widget build(BuildContext context) {

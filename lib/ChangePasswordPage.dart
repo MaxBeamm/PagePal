@@ -35,12 +35,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
           email: globalUserInfo.email,
           password: passwordController.text
       );
-    } on FirebaseAuthException catch (e) {
-      /*if (e.code == 'user-not-found') {
-        print('No user found for that email.');
-      } else if (e.code == 'wrong-password') {
-        print('Wrong password provided for that user.');
-      }*/
+    } on FirebaseAuthException {
       return false;
     }
     return true;
@@ -88,6 +83,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                 PlatformTextField(
                   controller: passwordController,
                   hintText: 'Current password',
+                  obscureText: true,
                   requiredReminder: passwordRequiredReminder,
                 ),
                 const Padding(padding: EdgeInsets.only(top: 20)),
@@ -96,6 +92,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                 PlatformTextField(
                   controller: newPasswordController,
                   hintText: 'New password',
+                  obscureText: true,
                   requiredReminder: newPasswordRequiredReminder,
                 )
               ],

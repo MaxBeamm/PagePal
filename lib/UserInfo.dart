@@ -16,7 +16,7 @@ class UserInfo {
   }
 
   void setSignedIn(bool signedIn) {
-    _signedIn = _signedIn;
+    _signedIn = signedIn;
   }
 
   String getUuid() {
@@ -31,7 +31,10 @@ class UserInfo {
         _signedIn = false;
       } else {
         print('User ${user.uid} is signed in!');
-        populateFromDatabase(user.uid);
+        populateFromDatabase(user.uid).catchError((Object error) {
+          // Older accounts may not have an associated profile document.
+          print('Could not load profile: $error');
+        });
         _signedIn = true;
       }
     });
@@ -40,11 +43,11 @@ class UserInfo {
   Future<void> populateFromDatabase(String uuid) async {
     CollectionReference profilesCollection = FirebaseFirestore.instance.collection('profiles');
     await profilesCollection.doc(uuid).get().then((value) {
-      Map<String, dynamic> data = value.data() as Map<String, dynamic>;
+      final data = value.data() as Map<String, dynamic>?;
       this.uuid = uuid;
-      firstName = data['FirstName'];
-      lastName = data['LastName'];
-      email = data['Email'];
+      firstName = data?['FirstName'] as String? ?? 'Guest';
+      lastName = data?['LastName'] as String? ?? 'User';
+      email = data?['Email'] as String? ?? FirebaseAuth.instance.currentUser?.email ?? '';
     });
   }
 
